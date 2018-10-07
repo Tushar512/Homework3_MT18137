@@ -1,6 +1,8 @@
 package com.example.tushar.homework3_mt18137;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,42 +17,9 @@ public class QuestionDetailActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_question_detail);
-        question = findViewById(R.id.question);
-        questionId = findViewById(R.id.questionId);
-        Intent i = getIntent();
-        try {
-            String qid = i.getStringExtra("questionId");
-            currentQid = Integer.parseInt(qid.substring(1));
-            displayQuestion();
-            Button nextBtn = findViewById(R.id.nextBtn);
-            nextBtn.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view) {
-                    if(currentQid < 30) {
-                        currentQid++;
-                        displayQuestion();
-                    }
-                }
-            });
-            Button prevBtn = findViewById(R.id.prevBtn);
-            prevBtn.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View view) {
-                    if(currentQid > 1) {
-                        currentQid--;
-                        displayQuestion();
-                    }
-                }
-            });
-        } catch(Exception e) {
-            Log.i("Error", e.getMessage());
-        }
-    }
-    public void displayQuestion() {
-        DatabaseHelper dh = new DatabaseHelper(this);
-        Question q = dh.getQuestionById(currentQid);
-        question.setText(q.getQuestion());
-        questionId.setText("Q"+q.getId());
-
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.add(R.id.detailContainer, new DetailFragment());
+        ft.commit();
     }
 }
